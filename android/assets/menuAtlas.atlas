@@ -6,7 +6,7 @@ filter: Nearest, Nearest
 repeat: none
 exit
   rotate: false
-  xy: 1256, 144
+  xy: 1156, 144
   size: 500, 500
   orig: 500, 500
   offset: 0, 0
@@ -20,8 +20,8 @@ star
   index: -1
 start
   rotate: false
-  xy: 654, 44
-  size: 600, 600
-  orig: 600, 600
+  xy: 654, 144
+  size: 500, 500
+  orig: 500, 500
   offset: 0, 0
   index: -1
