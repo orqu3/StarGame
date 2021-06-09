@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.stargame.base.BaseScreen;
 import com.stargame.math.Rect;
+import com.stargame.pool.BulletPool;
 import com.stargame.sprite.Background;
 import com.stargame.sprite.MainShip;
 import com.stargame.sprite.Star;
@@ -20,6 +21,7 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Star[] stars;
 
+    private BulletPool bulletPool;
     private MainShip mainShip;
 
     @Override
@@ -32,13 +34,14 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
-        mainShip = new MainShip(atlas);
+        bulletPool = new BulletPool();
+        mainShip = new MainShip(atlas, bulletPool);
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 
@@ -57,6 +60,7 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
     }
 
     private void update(float delta) {
@@ -64,6 +68,7 @@ public class GameScreen extends BaseScreen {
             star.update(delta);
         }
         mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
     }
 
     private void draw() {
@@ -74,7 +79,12 @@ public class GameScreen extends BaseScreen {
             star.draw(batch);
         }
         mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    private void freeAllDestroyed() {
+        bulletPool.freeAllDestroyed();
     }
 
     @Override
