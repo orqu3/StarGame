@@ -11,10 +11,10 @@ import com.stargame.base.BaseScreen;
 import com.stargame.math.Rect;
 import com.stargame.pool.BulletPool;
 import com.stargame.pool.EnemyPool;
-import com.stargame.sprite.Background;
-import com.stargame.sprite.MainShip;
-import com.stargame.sprite.Star;
+import com.stargame.sprite.*;
 import com.stargame.utils.EnemyEmitter;
+
+import java.util.List;
 
 public class GameScreen extends BaseScreen {
 
@@ -60,6 +60,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         update(delta);
+        checkCollisions();
         freeAllDestroyed();
         draw();
     }
@@ -94,6 +95,34 @@ public class GameScreen extends BaseScreen {
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
+    }
+
+    private void checkCollisions() {
+        List<EnemyShip> enemyShipList = enemyPool.getActiveObjects();
+        for(EnemyShip enemyShip : enemyShipList) {
+            if(enemyShip.isDestroyed()) {
+                continue;
+            }
+            float minDist = enemyShip.getHalfWidth() + mainShip.getHalfWidth();
+            if(enemyShip.pos.dst(mainShip.pos) < minDist) {
+                enemyShip.destroy();
+            }
+        }
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+        for (Bullet bullet : bulletList) {
+            if (bullet.isDestroyed() || bullet.getOwner() != mainShip) {
+                continue;
+            }
+            for (EnemyShip enemyShip : enemyShipList) {
+                if (enemyShip.isDestroyed()) {
+                    continue;
+                }
+                if (enemyShip.isBulletCollision(bullet)) {
+                    enemyShip.destroy();
+                    bullet.destroy();
+                }
+            }
+        }
     }
 
     private void draw() {
