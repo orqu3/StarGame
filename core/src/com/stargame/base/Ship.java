@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.stargame.math.Rect;
 import com.stargame.pool.BulletPool;
+import com.stargame.pool.ExplosionPool;
 import com.stargame.sprite.Bullet;
+import com.stargame.sprite.Explosion;
 
 public class Ship extends Sprite {
 
@@ -15,6 +17,7 @@ public class Ship extends Sprite {
     protected Vector2 v;
 
     protected Rect worldBounds;
+    protected ExplosionPool explosionPool;
     protected BulletPool bulletPool;
     protected TextureRegion bulletRegion;
     protected Vector2 bulletV;
@@ -27,7 +30,7 @@ public class Ship extends Sprite {
     protected float reloadInterval;
     protected float reloadTimer;
 
-    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL ;
+    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
 
     public Ship() {
     }
@@ -45,9 +48,15 @@ public class Ship extends Sprite {
             shoot();
         }
         damageAnimateTimer += delta;
-        if(damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
+        if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
             frame = 0;
         }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 
     public void damage(int damage) {
@@ -69,5 +78,10 @@ public class Ship extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, damage, bulletHeight);
         bulletSound.play();
+    }
+
+    private void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(this.pos, getHeight());
     }
 }
