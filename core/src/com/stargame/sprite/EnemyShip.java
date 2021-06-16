@@ -6,11 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.stargame.base.Ship;
 import com.stargame.math.Rect;
 import com.stargame.pool.BulletPool;
+import com.stargame.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
-    public EnemyShip(Rect worldBounds, BulletPool bulletPool, Sound bulletSound) {
+    public EnemyShip(Rect worldBounds, ExplosionPool explosionPool, BulletPool bulletPool, Sound bulletSound) {
         this.worldBounds = worldBounds;
+        this.explosionPool = explosionPool;
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
         v0 = new Vector2();
