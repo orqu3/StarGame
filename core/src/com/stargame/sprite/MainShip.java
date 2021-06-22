@@ -11,7 +11,7 @@ import com.stargame.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
-    private static final int HP = 10;
+    private static final int HP = 100;
 
     private static final float HEIGHT = 0.15f;
     private static final float PADDING = 0.05f;
