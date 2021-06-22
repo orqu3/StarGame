@@ -65,10 +65,6 @@ public class GameScreen extends BaseScreen {
         bg = new Texture("space.png");
         background = new Background(bg);
         atlas = new TextureAtlas("mainAtlas.atlas");
-        stars = new Star[STAR_COUNT];
-        for (int i = 0; i < stars.length; i++) {
-            stars[i] = new Star(atlas);
-        }
         gameOver = new GameOver(atlas);
         newGameButton = new NewGameButton(atlas, this);
         bulletPool = new BulletPool();
@@ -78,6 +74,10 @@ public class GameScreen extends BaseScreen {
         enemyPool = new EnemyPool(worldBounds, explosionPool, bulletPool, bulletSound);
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         mainShip = new MainShip(atlas, explosionPool, bulletPool, laserSound);
+        stars = new TrackingStar[STAR_COUNT];
+        for (int i = 0; i < stars.length; i++) {
+            stars[i] = new TrackingStar(atlas, mainShip.getV());
+        }
         enemyEmitter = new EnemyEmitter(worldBounds, enemyPool, atlas);
         font = new Font("font/font.fnt", "font/font.png");
         font.setSize(FONT_SIZE);
