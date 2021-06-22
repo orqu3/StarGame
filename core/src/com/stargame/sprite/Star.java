@@ -9,7 +9,7 @@ import com.stargame.math.Rnd;
 
 public class Star extends Sprite {
 
-    private Vector2 v;
+    protected Vector2 v;
     private Rect worldBounds;
 
     public Star(TextureAtlas atlas) {
@@ -34,6 +34,11 @@ public class Star extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(v, delta);
+        checkBounds();
+        animate(delta);
+    }
+
+    protected void checkBounds() {
         if (getRight() < worldBounds.getLeft()) {
             setLeft(worldBounds.getRight());
         }
@@ -46,6 +51,9 @@ public class Star extends Sprite {
         if (getBottom() > worldBounds.getTop()) {
             setTop(worldBounds.getBottom());
         }
+    }
+
+    protected void animate(float delta) {
         float height = getHeight();
         height += 0.0001f;
         if (height >= 0.012f) {
